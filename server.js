@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -16,6 +17,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -38,8 +41,16 @@ app.use(session({
   }
 }));
 
+const authRoutes = require('./routes/auth');
+const dashboardRoutes = require('./routes/dashboard');
+const productsRoutes = require('./routes/products');
+const sizesRoutes = require('./routes/sizes');
+
 app.use(setUserLocals);
 app.use(authRoutes);
+app.use(dashboardRoutes);
+app.use(productsRoutes);
+app.use(sizesRoutes);
 
 app.get('/', (req, res) => {
   res.status(200).json({

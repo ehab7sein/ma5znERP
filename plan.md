@@ -1,16 +1,16 @@
-﻿## TODO List
+## TODO List
 
 - [x] Task 1 — تهيئة المشروع
 - [x] Task 2 — إنشاء ملفات SQL لقاعدة البيانات
 - [x] Task 3 — إعداد البيئة وربط Supabase
-- [ ] Task 4 — إنشاء Models Layer
-- [ ] Task 5 — Middleware Layer
-- [ ] Task 6 — Authentication Controller و Routes
-- [ ] Task 7 — صفحة تسجيل الدخول (Frontend)
-- [ ] Task 8 — الـ Layout الرئيسي (EJS Partial Layout)
-- [ ] Task 9 — لوحة التحكم (Dashboard)
-- [ ] Task 10 — إدارة موديلات الأحذية (Products CRUD + Frontend)
-- [ ] Task 11 — إدارة المقاسات داخل الموديل (Product Sizes CRUD + Frontend)
+- [x] Task 4 — إنشاء Models Layer
+- [x] Task 5 — Middleware Layer
+- [x] Task 6 — Authentication Controller و Routes
+- [x] Task 7 — صفحة تسجيل الدخول (Frontend)
+- [x] Task 8 — الـ Layout الرئيسي (EJS Partial Layout)
+- [x] Task 9 — لوحة التحكم (Dashboard)
+- [x] Task 10 — إدارة موديلات الأحذية (Products CRUD + Frontend)
+- [x] Task 11 — إدارة المقاسات داخل الموديل (Product Sizes CRUD + Frontend)
 - [ ] Task 12 — إضافة مخزون (Stock IN Workflow)
 - [ ] Task 13 — صرف مخزون (Stock OUT Workflow)
 - [ ] Task 14 — سجل الحركات (Transactions History + Filters)

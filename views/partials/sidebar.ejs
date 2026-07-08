@@ -1,0 +1,37 @@
+<aside id="sidebar" class="bg-indigo-800 text-white w-64 flex-shrink-0 hidden md:flex flex-col transition-all duration-300 z-20 h-full">
+    <div class="h-16 flex items-center justify-center border-b border-indigo-700">
+        <h1 class="text-xl font-bold">ماخزن ERP</h1>
+    </div>
+    
+    <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+        <a href="/dashboard" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">📊</span> لوحة التحكم
+        </a>
+        <a href="/products" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">👞</span> موديلات الأحذية
+        </a>
+        <a href="/transactions/in" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">📥</span> إضافة مخزون
+        </a>
+        <a href="/transactions/out" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">📤</span> صرف مخزون
+        </a>
+        <a href="/transactions" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">📋</span> سجل الحركات
+        </a>
+        <a href="/packaging" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">📦</span> مواد التعبئة
+        </a>
+        <a href="/reports" class="flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors">
+            <span class="mr-3">📈</span> التقارير
+        </a>
+    </nav>
+    
+    <div class="p-4 border-t border-indigo-700">
+        <form action="/logout" method="POST" id="logoutFormSidebar">
+            <button type="submit" class="w-full flex items-center justify-center px-4 py-2 text-indigo-200 hover:text-white hover:bg-indigo-700 rounded transition-colors">
+                <span class="mr-2">🚪</span> تسجيل الخروج
+            </button>
+        </form>
+    </div>
+</aside>

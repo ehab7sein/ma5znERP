@@ -1,0 +1,41 @@
+/* General CSS */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+::-webkit-scrollbar-thumb {
+    background: #c7c7cc; 
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a5; 
+}
+
+/* Mobile Sidebar */
+@media (max-width: 768px) {
+    #sidebar.mobile-open {
+        display: flex;
+        position: fixed;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 40;
+    }
+}
+
+/* Animations */
+.toast-enter {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+}
+
+.modal-enter .modal-overlay {
+    opacity: 1 !important;
+}
+.modal-enter .modal-panel {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+}

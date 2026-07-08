@@ -3,10 +3,7 @@
 const User = require('../models/User');
 
 function showLogin(req, res) {
-  return res.status(200).json({
-    success: true,
-    message: 'صفحة تسجيل الدخول جاهزة وسيتم إنشاء الواجهة في Task 7'
-  });
+  return res.render('pages/login', { layout: false });
 }
 
 async function login(req, res, next) {
@@ -39,7 +36,7 @@ async function login(req, res, next) {
     return res.status(200).json({
       success: true,
       message: 'تم تسجيل الدخول بنجاح',
-      redirectTo: '/dashboard',
+      redirectUrl: '/dashboard',
       user: req.session.user
     });
   } catch (error) {
@@ -65,7 +62,7 @@ function logout(req, res, next) {
     return res.status(200).json({
       success: true,
       message: 'تم تسجيل الخروج بنجاح',
-      redirectTo: '/login'
+      redirectUrl: '/login'
     });
   });
 }

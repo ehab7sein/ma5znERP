@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<%- include('../partials/head') %>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased overflow-x-hidden">
+    <div class="flex h-screen overflow-hidden">
+        <%- include('../partials/sidebar') %>
+        
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            <%- include('../partials/header') %>
+            
+            <main class="w-full flex-grow p-6">
+                <%- body %>
+            </main>
+            
+            <%- include('../partials/footer') %>
+        </div>
+    </div>
+    
+    <%- include('../partials/toast') %>
+    <%- include('../partials/modal') %>
+    <%- include('../partials/skeleton') %>
+    
+    <script src="/js/main.js"></script>
+</body>
+</html>
