@@ -118,7 +118,7 @@ async function getAll(filters = {}) {
 
   let query = supabase
     .from('inventory_transactions')
-    .select(TRANSACTION_COLUMNS, { count: 'exact' });
+    .select(`${TRANSACTION_COLUMNS}, product_sizes(size)`, { count: 'exact' });
 
   query = applyFilters(query, filters)
     .order('created_at', { ascending: false })
@@ -130,8 +130,36 @@ async function getAll(filters = {}) {
     throw new Error(`تعذر جلب سجل الحركات: ${error.message}`);
   }
 
+  const transactions = data || [];
+
+  const shoeIds = [...new Set(transactions.filter(t => t.item_type === 'shoe').map(t => t.item_id))];
+  const packagingIds = [...new Set(transactions.filter(t => t.item_type === 'packaging').map(t => t.item_id))];
+  const userIds = [...new Set(transactions.filter(t => t.created_by).map(t => t.created_by))];
+
+  const [productsResult, packagingResult, usersResult] = await Promise.all([
+    shoeIds.length ? supabase.from('products').select('id, model_name').in('id', shoeIds) : { data: [] },
+    packagingIds.length ? supabase.from('packaging_items').select('id, name').in('id', packagingIds) : { data: [] },
+    userIds.length ? supabase.from('users').select('id, username').in('id', userIds) : { data: [] }
+  ]);
+
+  const productMap = {};
+  (productsResult.data || []).forEach(p => { productMap[p.id] = p.model_name; });
+  const packagingMap = {};
+  (packagingResult.data || []).forEach(p => { packagingMap[p.id] = p.name; });
+  const userMap = {};
+  (usersResult.data || []).forEach(u => { userMap[u.id] = u.username; });
+
+  const enriched = transactions.map(tx => ({
+    ...tx,
+    item_name: tx.item_type === 'shoe' ? (productMap[tx.item_id] || '-') : (packagingMap[tx.item_id] || '-'),
+    size: tx.item_type === 'shoe' && tx.product_sizes ? tx.product_sizes.size : null,
+    username: userMap[tx.created_by] || null,
+    formatted_date: new Date(tx.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' }),
+    formatted_time: new Date(tx.created_at).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
+  }));
+
   return {
-    data: data || [],
+    data: enriched,
     count: count || 0,
     page,
     limit
@@ -143,7 +171,7 @@ async function getRecent(limit = 10) {
 
   const { data, error } = await supabase
     .from('inventory_transactions')
-    .select(TRANSACTION_COLUMNS)
+    .select(`${TRANSACTION_COLUMNS}, product_sizes(size)`)
     .order('created_at', { ascending: false })
     .limit(safeLimit);
 
@@ -151,7 +179,25 @@ async function getRecent(limit = 10) {
     throw new Error(`تعذر جلب آخر الحركات: ${error.message}`);
   }
 
-  return data || [];
+  const transactions = data || [];
+  const shoeIds = [...new Set(transactions.filter(t => t.item_type === 'shoe').map(t => t.item_id))];
+  const packagingIds = [...new Set(transactions.filter(t => t.item_type === 'packaging').map(t => t.item_id))];
+
+  const [productsResult, packagingResult] = await Promise.all([
+    shoeIds.length ? supabase.from('products').select('id, model_name').in('id', shoeIds) : { data: [] },
+    packagingIds.length ? supabase.from('packaging_items').select('id, name').in('id', packagingIds) : { data: [] }
+  ]);
+
+  const productMap = {};
+  (productsResult.data || []).forEach(p => { productMap[p.id] = p.model_name; });
+  const packagingMap = {};
+  (packagingResult.data || []).forEach(p => { packagingMap[p.id] = p.name; });
+
+  return transactions.map(tx => ({
+    ...tx,
+    item_name: tx.item_type === 'shoe' ? (productMap[tx.item_id] || '-') : (packagingMap[tx.item_id] || '-'),
+    size: tx.item_type === 'shoe' && tx.product_sizes ? tx.product_sizes.size : null
+  }));
 }
 
 async function getDailyCount() {

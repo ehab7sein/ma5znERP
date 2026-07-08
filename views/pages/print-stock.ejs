@@ -17,63 +17,72 @@
             color: #1b1b24;
         }
         .print-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             border-bottom: 2px solid #222;
             padding-bottom: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+        .print-header .company-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin: 0 0 4px;
+            letter-spacing: 1px;
         }
         .print-header h1 {
             font-size: 22px;
             font-weight: 700;
-            margin: 0;
+            margin: 0 0 4px;
             color: #1b1b24;
         }
-        .print-header .print-date {
-            font-size: 11px;
-            color: #666;
+        .print-header .print-meta {
+            font-size: 10px;
+            color: #888;
+            margin: 0;
+        }
+        .print-meta span {
+            margin: 0 8px;
         }
         .print-summary {
             display: flex;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
         .print-summary-item {
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
             border: 1px solid #ddd;
-            padding: 10px 14px;
+            padding: 8px 12px;
             text-align: center;
             border-radius: 6px;
         }
         .print-summary-item .label {
-            font-size: 11px;
+            font-size: 10px;
             color: #666;
             margin: 0;
         }
         .print-summary-item .value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: #1b1b24;
-            margin: 4px 0 0;
+            margin: 2px 0 0;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 10px;
-            margin: 12px 0;
+            font-size: 9px;
+            margin: 8px 0;
         }
         th, td {
-            padding: 6px 8px;
+            padding: 5px 7px;
             border: 1px solid #ccc;
             text-align: right;
         }
         th {
             background: #f0f0f0;
             font-weight: 600;
-            font-size: 9px;
+            font-size: 8px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             border-bottom: 2px solid #222;
@@ -85,19 +94,19 @@
             background: #f9f9f9;
         }
         .section-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             border-bottom: 1px solid #222;
-            padding-bottom: 4px;
-            margin: 24px 0 10px;
+            padding-bottom: 3px;
+            margin: 18px 0 8px;
             color: #1b1b24;
         }
         .chip-print {
             display: inline-block;
-            padding: 1px 8px;
+            padding: 1px 7px;
             border: 1px solid #888;
             border-radius: 3px;
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 600;
         }
         .chip-ok { border-color: #22a67e; color: #166b50; }
@@ -112,20 +121,50 @@
             font-size: 8px;
             color: #999;
             border-top: 1px solid #ddd;
-            padding-top: 6px;
-            margin-top: 24px;
+            padding-top: 5px;
+            margin-top: 20px;
         }
-        .print-no-print { display: none; }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 16px;
+            border-top: 1px solid #ddd;
+        }
+        .signature-box {
+            text-align: center;
+            min-width: 180px;
+        }
+        .signature-box .label {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .signature-box .line {
+            border-bottom: 1px solid #222;
+            height: 30px;
+            margin-top: 4px;
+        }
+        .page-number {
+            text-align: center;
+            font-size: 8px;
+            color: #aaa;
+            margin-top: 12px;
+        }
+        @media print {
+            .print-no-print { display: none !important; }
+            body { padding: 15px 20px; }
+        }
     </style>
 </head>
 <body>
     <div class="print-header">
-        <div>
-            <h1>تقرير جرد المخزون</h1>
-        </div>
-        <div class="print-date">
-            تاريخ التقرير: <%= printDate %>
-        </div>
+        <p class="company-name">نظام إدارة المخزون - ماخزنERP</p>
+        <h1>تقرير جرد المخزون</h1>
+        <p class="print-meta">
+            <span>تاريخ الإنشاء: <%= printDate %></span>
+            <span>الوقت: <%= printTime %></span>
+        </p>
     </div>
 
     <div class="print-summary">
@@ -137,18 +176,22 @@
             <p class="label">إجمالي كمية الأحذية</p>
             <p class="value"><%= totalShoesQty %></p>
         </div>
+        <% if (includePackaging) { %>
         <div class="print-summary-item">
             <p class="label">إجمالي مواد التعبئة</p>
             <p class="value"><%= totalPackagingQty %></p>
         </div>
+        <% } %>
         <div class="print-summary-item">
             <p class="label">منخفضة (أحذية)</p>
             <p class="value" style="color: <%= lowStockShoesCount > 0 ? '#92400e' : '#166b50' %>"><%= lowStockShoesCount %></p>
         </div>
+        <% if (includePackaging) { %>
         <div class="print-summary-item">
             <p class="label">منخفضة (تعبئة)</p>
             <p class="value" style="color: <%= lowStockPackagingCount > 0 ? '#92400e' : '#166b50' %>"><%= lowStockPackagingCount %></p>
         </div>
+        <% } %>
     </div>
 
     <h2 class="section-title">الموديلات والمقاسات</h2>
@@ -208,6 +251,7 @@
         </tbody>
     </table>
 
+    <% if (includePackaging && packagingItems.length > 0) { %>
     <h2 class="section-title">مواد التعبئة والتغليف</h2>
     <table>
         <thead>
@@ -239,9 +283,27 @@
             <% }); %>
         </tbody>
     </table>
+    <% } %>
+
+    <div class="signature-section">
+        <div class="signature-box">
+            <p class="label">أمين المخزن</p>
+            <div class="line"></div>
+        </div>
+        <div class="signature-box">
+            <p class="label">المدير المسؤول</p>
+            <div class="line"></div>
+        </div>
+        <div class="signature-box">
+            <p class="label">التاريخ</p>
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <div class="page-number" id="pageNumber">صفحة 1</div>
 
     <div class="print-footer">
-        نظام إدارة المخزون — تقرير جرد المخزون — تم الإنشاء: <%= printDate %> — صفحة 1
+        نظام إدارة المخزون — ماخزنERP — تقرير جرد المخزون
     </div>
 
     <script>

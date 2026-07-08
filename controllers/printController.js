@@ -8,8 +8,9 @@ const supabase = require('../config/supabase');
 
 async function printStockReport(req, res, next) {
   try {
+    const includePackaging = req.query.includePackaging !== 'false';
     const products = await Product.getAllWithSizes();
-    const packagingItems = await PackagingItem.getAll();
+    const packagingItems = includePackaging ? await PackagingItem.getAll() : [];
 
     const { data: sizeData } = await supabase
       .from('product_sizes')
@@ -22,12 +23,17 @@ async function printStockReport(req, res, next) {
     const totalPackagingQty = packagingItems.reduce((acc, curr) => acc + (curr.quantity || 0), 0);
 
     const lowStockShoes = await ProductSize.getLowStock();
-    const lowStockPackaging = await PackagingItem.getLowStock();
+    const lowStockPackaging = includePackaging ? await PackagingItem.getLowStock() : [];
 
-    const printDate = new Date().toLocaleDateString('ar-SA', {
+    const now = new Date();
+    const printDate = now.toLocaleDateString('ar-SA', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
+    });
+    const printTime = now.toLocaleTimeString('ar-SA', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
 
     res.render('pages/print-stock', {
@@ -35,11 +41,13 @@ async function printStockReport(req, res, next) {
       layout: false,
       products,
       packagingItems,
+      includePackaging,
       totalShoesQty,
       totalPackagingQty,
       lowStockShoesCount: lowStockShoes.length,
       lowStockPackagingCount: lowStockPackaging.length,
-      printDate
+      printDate,
+      printTime
     });
   } catch (error) {
     next(error);
@@ -48,20 +56,46 @@ async function printStockReport(req, res, next) {
 
 async function printTransactions(req, res, next) {
   try {
-    const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 500);
-    const transactions = await Transaction.getRecent(limit);
+    const filters = {};
+    if (req.query.dateFrom) filters.date_from = req.query.dateFrom;
+    if (req.query.dateTo) filters.date_to = req.query.dateTo;
+    filters.limit = 500;
 
-    const printDate = new Date().toLocaleDateString('ar-SA', {
+    const result = await Transaction.getAll(filters);
+    const transactions = result.data || [];
+
+    const now = new Date();
+    const printDate = now.toLocaleDateString('ar-SA', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+    const printTime = now.toLocaleTimeString('ar-SA', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    let dateRangeLabel = 'جميع الفترات';
+    if (req.query.dateFrom && req.query.dateTo) {
+      const from = new Date(req.query.dateFrom).toLocaleDateString('ar-SA');
+      const to = new Date(req.query.dateTo).toLocaleDateString('ar-SA');
+      dateRangeLabel = `من ${from} إلى ${to}`;
+    } else if (req.query.dateFrom) {
+      const from = new Date(req.query.dateFrom).toLocaleDateString('ar-SA');
+      dateRangeLabel = `من ${from}`;
+    } else if (req.query.dateTo) {
+      const to = new Date(req.query.dateTo).toLocaleDateString('ar-SA');
+      dateRangeLabel = `حتى ${to}`;
+    }
 
     res.render('pages/print-transactions', {
       title: 'سجل الحركات',
       layout: false,
       transactions,
-      printDate
+      printDate,
+      printTime,
+      dateRangeLabel,
+      totalCount: result.count || 0
     });
   } catch (error) {
     next(error);

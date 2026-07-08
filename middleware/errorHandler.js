@@ -20,7 +20,7 @@ function errorHandler(err, req, res, next) {
 
   return res.status(statusCode).json({
     success: false,
-    message: statusCode === 500 ? 'حدث خطأ غير متوقع' : err.message
+    message: err.message || 'حدث خطأ غير متوقع'
   });
 }
 

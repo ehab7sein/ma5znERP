@@ -1,7 +1,7 @@
 {
   "name": "ma5znerp",
   "version": "1.0.0",
-  "description": "نظام إدارة مخزن الأحذية - Warehouse Management System for Shoes",
+  "description": "Ma5znERP - نظام إدارة مخازن الأحذية (Warehouse Management System for Shoes). Built with Node.js, Express, EJS, and Supabase. Features include products/sizes CRUD, transactions, packaging, inventory management, PDF printing, and dashboard reporting.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

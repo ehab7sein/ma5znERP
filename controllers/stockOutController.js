@@ -52,7 +52,7 @@ async function processStockOut(req, res, next) {
       supplier_or_receiver: receiver,
       reason: reason,
       notes: notes,
-      created_by: req.user ? req.user.username : 'admin'
+      created_by: req.session.user ? req.session.user.id : null
     });
 
     return res.json({ success: true, message: 'تم صرف الكمية بنجاح' });

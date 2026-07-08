@@ -16,38 +16,72 @@
             color: #1b1b24;
         }
         .print-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             border-bottom: 2px solid #222;
             padding-bottom: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+        .print-header .company-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin: 0 0 4px;
+            letter-spacing: 1px;
         }
         .print-header h1 {
             font-size: 22px;
             font-weight: 700;
-            margin: 0;
+            margin: 0 0 4px;
             color: #1b1b24;
         }
-        .print-header .print-date {
-            font-size: 11px;
+        .print-header .print-meta {
+            font-size: 10px;
+            color: #888;
+            margin: 0;
+        }
+        .print-meta span {
+            margin: 0 8px;
+        }
+        .print-summary {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .print-summary-item {
+            flex: 1;
+            min-width: 120px;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: center;
+            border-radius: 6px;
+        }
+        .print-summary-item .label {
+            font-size: 10px;
             color: #666;
+            margin: 0;
+        }
+        .print-summary-item .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1b1b24;
+            margin: 2px 0 0;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9px;
-            margin: 12px 0;
+            font-size: 8px;
+            margin: 8px 0;
         }
         th, td {
-            padding: 5px 7px;
+            padding: 4px 6px;
             border: 1px solid #ccc;
             text-align: right;
         }
         th {
             background: #f0f0f0;
             font-weight: 600;
-            font-size: 8px;
+            font-size: 7px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             border-bottom: 2px solid #222;
@@ -60,14 +94,14 @@
         }
         .chip-print {
             display: inline-block;
-            padding: 1px 7px;
+            padding: 1px 6px;
             border: 1px solid #888;
             border-radius: 3px;
-            font-size: 7.5px;
+            font-size: 7px;
             font-weight: 600;
         }
-        .chip-in { border-color: #22a67e; color: #166b50; }
-        .chip-out { border-color: #dc2626; color: #991b1b; }
+        .chip-in { border-color: #22a67e; color: #166b50; background: #f0fdf4; }
+        .chip-out { border-color: #dc2626; color: #991b1b; background: #fef2f2; }
         .chip-shoe { border-color: #4f46e5; color: #3730a3; }
         .chip-pack { border-color: #d97706; color: #92400e; }
         .text-in { color: #166b50; font-weight: 700; }
@@ -77,18 +111,57 @@
             font-size: 8px;
             color: #999;
             border-top: 1px solid #ddd;
-            padding-top: 6px;
-            margin-top: 24px;
+            padding-top: 5px;
+            margin-top: 20px;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 16px;
+            border-top: 1px solid #ddd;
+        }
+        .signature-box {
+            text-align: center;
+            min-width: 180px;
+        }
+        .signature-box .label {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .signature-box .line {
+            border-bottom: 1px solid #222;
+            height: 30px;
+            margin-top: 4px;
+        }
+        .page-number {
+            text-align: center;
+            font-size: 8px;
+            color: #aaa;
+            margin-top: 12px;
         }
     </style>
 </head>
 <body>
     <div class="print-header">
-        <div>
-            <h1>سجل حركات المخزون</h1>
+        <p class="company-name">نظام إدارة المخزون - ماخزنERP</p>
+        <h1>سجل حركات المخزون</h1>
+        <p class="print-meta">
+            <span>تاريخ الإنشاء: <%= printDate %></span>
+            <span>الوقت: <%= printTime %></span>
+            <span>النطاق: <%= dateRangeLabel %></span>
+        </p>
+    </div>
+
+    <div class="print-summary">
+        <div class="print-summary-item">
+            <p class="label">إجمالي الحركات</p>
+            <p class="value"><%= totalCount %></p>
         </div>
-        <div class="print-date">
-            تاريخ التقرير: <%= printDate %>
+        <div class="print-summary-item">
+            <p class="label">تاريخ التقرير</p>
+            <p class="value" style="font-size: 14px;"><%= printDate %></p>
         </div>
     </div>
 
@@ -97,33 +170,39 @@
             <tr>
                 <th>#</th>
                 <th>التاريخ</th>
+                <th>الوقت</th>
                 <th>العملية</th>
                 <th>النوع</th>
+                <th>العنصر</th>
+                <th>المقاس</th>
                 <th>الكمية</th>
                 <th>الرصيد قبل</th>
                 <th>الرصيد بعد</th>
+                <th>المستخدم</th>
                 <th>المورد/المستلم</th>
-                <th>السبب</th>
                 <th>ملاحظات</th>
             </tr>
         </thead>
         <tbody>
             <% if (transactions.length === 0) { %>
                 <tr>
-                    <td colspan="10" style="text-align: center; color: #999;">لا توجد حركات</td>
+                    <td colspan="13" style="text-align: center; color: #999;">لا توجد حركات</td>
                 </tr>
             <% } else { %>
                 <% transactions.forEach((tx, idx) => { %>
                     <tr>
                         <td><%= idx + 1 %></td>
-                        <td><%= new Date(tx.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></td>
+                        <td><%= new Date(tx.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                        <td><%= new Date(tx.created_at).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) %></td>
                         <td><span class="chip-print <%= tx.transaction_type === 'IN' ? 'chip-in' : 'chip-out' %>"><%= tx.transaction_type === 'IN' ? 'إضافة' : 'صرف' %></span></td>
                         <td><span class="chip-print <%= tx.item_type === 'shoe' ? 'chip-shoe' : 'chip-pack' %>"><%= tx.item_type === 'shoe' ? 'حذاء' : 'تعبئة' %></span></td>
+                        <td><%= tx.item_name || '-' %></td>
+                        <td><%= tx.size || '-' %></td>
                         <td class="<%= tx.transaction_type === 'IN' ? 'text-in' : 'text-out' %>"><%= tx.quantity %></td>
                         <td><%= tx.balance_before %></td>
                         <td><%= tx.balance_after %></td>
+                        <td><%= tx.username || '-' %></td>
                         <td><%= tx.supplier_or_receiver || '-' %></td>
-                        <td><%= tx.reason || '-' %></td>
                         <td><%= tx.notes || '-' %></td>
                     </tr>
                 <% }); %>
@@ -131,8 +210,25 @@
         </tbody>
     </table>
 
+    <div class="signature-section">
+        <div class="signature-box">
+            <p class="label">أمين المخزن</p>
+            <div class="line"></div>
+        </div>
+        <div class="signature-box">
+            <p class="label">المدير المسؤول</p>
+            <div class="line"></div>
+        </div>
+        <div class="signature-box">
+            <p class="label">التاريخ</p>
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <div class="page-number" id="pageNumber">صفحة 1</div>
+
     <div class="print-footer">
-        نظام إدارة المخزون — سجل الحركات — تم الإنشاء: <%= printDate %>
+        نظام إدارة المخزون — ماخزنERP — سجل حركات المخزون
     </div>
 
     <script>

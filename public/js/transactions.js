@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('transactionsTableBody');
+    const filterSearch = document.getElementById('filterSearch');
     const filterType = document.getElementById('filterType');
     const filterItemType = document.getElementById('filterItemType');
     const filterDateFrom = document.getElementById('filterDateFrom');
@@ -18,8 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatDate(iso) {
         if (!iso) return '-';
         const d = new Date(iso);
-        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        return d.toLocaleDateString('ar-SA', options);
+        return d.toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function formatTime(iso) {
+        if (!iso) return '-';
+        const d = new Date(iso);
+        return d.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
     }
 
     function getStatusChip(transactionType) {
@@ -39,14 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSkeletons() {
         tableBody.innerHTML = Array(5).fill(`
             <tr class="animate-pulse">
-                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-24"></div></td>
-                <td class="py-3 px-lg"><div class="h-5 bg-surface-container-high rounded-full w-14"></div></td>
-                <td class="py-3 px-lg"><div class="h-5 bg-surface-container-high rounded-full w-14"></div></td>
-                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-10"></div></td>
-                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-10"></div></td>
-                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-10"></div></td>
                 <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-20"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-12"></div></td>
+                <td class="py-3 px-lg"><div class="h-5 bg-surface-container-high rounded-full w-14"></div></td>
+                <td class="py-3 px-lg"><div class="h-5 bg-surface-container-high rounded-full w-14"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-24"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-12"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-10"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-10"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-10"></div></td>
                 <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-16"></div></td>
+                <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-20"></div></td>
                 <td class="py-3 px-lg"><div class="h-4 bg-surface-container-high rounded w-20"></div></td>
             </tr>`).join('');
     }
@@ -54,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderEmpty() {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="9" class="py-12 text-center">
+                <td colspan="12" class="py-12 text-center">
                     <span class="material-symbols-outlined text-4xl text-outline block mb-2">history_toggle_off</span>
                     <p class="text-on-surface-variant font-body-md">لا توجد حركات مطابقة للفلترة</p>
                 </td>
@@ -67,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         params.set('page', page);
         params.set('limit', limit);
 
+        if (filterSearch.value.trim()) params.set('search', filterSearch.value.trim());
         if (filterType.value) params.set('type', filterType.value);
         if (filterItemType.value) params.set('itemType', filterItemType.value);
         if (filterDateFrom.value) params.set('dateFrom', filterDateFrom.value);
@@ -105,15 +115,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const qtyColor = tx.transaction_type === 'IN' ? 'text-emerald-600' : 'text-rose-600';
 
             tr.innerHTML = `
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${formatDate(tx.created_at)}</td>
+                <td class="py-3 px-lg text-body-md text-on-surface-variant text-nowrap">${formatDate(tx.created_at)}</td>
+                <td class="py-3 px-lg text-body-md text-on-surface-variant">${formatTime(tx.created_at)}</td>
                 <td class="py-3 px-lg">${getStatusChip(tx.transaction_type)}</td>
                 <td class="py-3 px-lg">${getItemTypeChip(tx.item_type)}</td>
+                <td class="py-3 px-lg text-body-md text-on-background font-bold">${tx.item_name || '-'}</td>
+                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.size || '-'}</td>
                 <td class="py-3 px-lg text-body-md font-bold ${qtyColor}">${tx.quantity}</td>
                 <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.balance_before}</td>
                 <td class="py-3 px-lg text-body-md text-on-background font-bold">${tx.balance_after}</td>
+                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.username || '-'}</td>
                 <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.supplier_or_receiver || '-'}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.reason || '-'}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant max-w-[150px] truncate" title="${tx.notes || ''}">${tx.notes || '-'}</td>`;
+                <td class="py-3 px-lg text-body-md text-on-surface-variant max-w-[120px] truncate" title="${tx.notes || ''}">${tx.notes || '-'}</td>`;
 
             tableBody.appendChild(tr);
         });
@@ -129,11 +142,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyBtn.addEventListener('click', () => fetchTransactions(1));
     clearBtn.addEventListener('click', () => {
+        filterSearch.value = '';
         filterType.value = '';
         filterItemType.value = '';
         filterDateFrom.value = '';
         filterDateTo.value = '';
         fetchTransactions(1);
+    });
+
+    // Enter key to search
+    filterSearch.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') fetchTransactions(1);
     });
 
     prevBtn.addEventListener('click', () => {
