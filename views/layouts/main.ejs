@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html class="light" dir="rtl" lang="ar">
 <%- include('../partials/head') %>
-<body class="bg-gray-50 font-sans text-gray-800 antialiased overflow-x-hidden">
-    <div class="flex h-screen overflow-hidden">
+<body class="text-on-background bg-[#F8FAFC]">
+
+    <% if (isAuthenticated) { %>
         <%- include('../partials/sidebar') %>
         
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-            <%- include('../partials/header') %>
-            
-            <main class="w-full flex-grow p-6">
-                <%- body %>
-            </main>
-            
-            <%- include('../partials/footer') %>
-        </div>
-    </div>
-    
+        <!-- Main Content Area with RTL offset -->
+        <main class="mr-0 lg:mr-[280px] min-h-screen p-lg lg:p-2xl transition-all duration-300">
+            <%- body %>
+        </main>
+    <% } else { %>
+        <!-- Minimal layout for Login/Auth pages -->
+        <main class="min-h-screen flex items-center justify-center p-md bg-[#F8FAFC]">
+            <%- body %>
+        </main>
+    <% } %>
+
     <%- include('../partials/toast') %>
     <%- include('../partials/modal') %>
     <%- include('../partials/skeleton') %>
-    
+
     <script src="/js/main.js"></script>
 </body>
 </html>

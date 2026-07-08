@@ -1,0 +1,74 @@
+<div class="mb-lg">
+    <h2 class="font-display-xl text-display-xl text-on-background mb-xs">صرف مخزون (أحذية)</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant">قم باختيار الموديل والمقاس، ثم أدخل الكمية المراد صرفها.</p>
+</div>
+
+<div class="bg-white rounded-xl border border-outline-variant shadow-soft max-w-3xl mx-auto overflow-hidden">
+    <div class="p-lg">
+        <form id="stockOutForm" class="space-y-lg">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                <!-- Product Selection -->
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الموديل <span class="text-error">*</span></label>
+                    <select id="productSelect" name="product_id" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                        <option value="">جاري تحميل الموديلات...</option>
+                    </select>
+                </div>
+
+                <!-- Size Selection -->
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">المقاس <span class="text-error">*</span></label>
+                    <select id="sizeSelect" name="product_size_id" required disabled class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                        <option value="">اختر الموديل أولاً</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-primary-container/10 border border-primary/20 rounded-lg p-4 flex items-center justify-between" id="balanceContainer" style="display: none;">
+                <span class="text-primary font-medium font-body-md">الرصيد المتاح حالياً:</span>
+                <span class="font-display-xl text-[28px] font-bold text-primary" id="currentBalance">0</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                <!-- Quantity -->
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الكمية المطلوبة للصرف <span class="text-error">*</span></label>
+                    <input type="number" id="quantityInput" name="quantity" min="1" required disabled class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                    <p id="quantityWarning" class="font-caption-xs text-caption-xs text-error mt-1 hidden">الكمية المطلوبة أكبر من المتوفر!</p>
+                </div>
+
+                <!-- Receiver -->
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الجهة المستلمة</label>
+                    <input type="text" name="receiver" placeholder="مثال: الفرع الرئيسي، العميل..." class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">سبب الصرف <span class="text-error">*</span></label>
+                <select name="reason" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                    <option value="بيع">بيع</option>
+                    <option value="نقل لمخزن آخر">نقل لمخزن آخر</option>
+                    <option value="تالف">تالف</option>
+                    <option value="مرتجع لمورد">مرتجع لمورد</option>
+                    <option value="عينة/هدية">عينة / هدية</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">ملاحظات إضافية</label>
+                <textarea name="notes" rows="3" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all"></textarea>
+            </div>
+
+            <div class="pt-md border-t border-outline-variant">
+                <button type="submit" id="submitBtn" disabled class="w-full flex justify-center py-3 px-4 rounded-lg shadow-soft font-label-sm text-label-sm text-on-primary bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container disabled:opacity-50 disabled:cursor-not-allowed transition-all-200">
+                    تنفيذ عملية الصرف
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/stock-out.js"></script>

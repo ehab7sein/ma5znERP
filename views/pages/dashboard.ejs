@@ -1,54 +1,130 @@
-<div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-800">نظرة عامة على النظام</h1>
-    <button id="refreshBtn" class="flex items-center text-sm bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded shadow-sm hover:bg-gray-50 transition-colors">
-        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-        تحديث
-    </button>
+<div class="flex flex-col sm:flex-row justify-between sm:items-end mb-lg gap-4">
+    <div>
+        <h2 class="font-display-xl text-display-xl text-on-background mb-xs">نظرة عامة</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">مرحباً بك، إليك ملخص لحالة المخزون اليوم.</p>
+    </div>
+    <div class="flex gap-sm">
+        <button id="refreshBtn" class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
+            تحديث
+        </button>
+        <button class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">download</span>
+            تصدير تقرير
+        </button>
+    </div>
 </div>
 
-<!-- Stats Grid -->
-<div id="statsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Stats Grid (Bento Style) -->
+<div id="statsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md mb-xl">
     <!-- Rendered via JS -->
 </div>
 
-<!-- Recent Transactions -->
-<div class="bg-white rounded-lg shadow overflow-hidden relative">
-    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-800">آخر الحركات</h2>
-        <a href="/transactions" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">عرض الكل &larr;</a>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-xl">
+    <!-- Recent Movements Table (2/3 width) -->
+    <div class="lg:col-span-2 bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden flex flex-col min-h-[400px]">
+        <div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+            <h3 class="font-title-md text-title-md text-on-background">آخر الحركات</h3>
+            <a href="/transactions" class="text-primary font-label-sm text-label-sm hover:underline">عرض الكل</a>
+        </div>
+        <div class="flex-1 overflow-auto max-h-[500px]">
+            <table class="w-full text-right" id="recentTable">
+                <thead class="sticky top-0 bg-slate-50 border-b border-outline-variant z-10">
+                    <tr>
+                        <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">التاريخ</th>
+                        <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">النوع</th>
+                        <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">العنصر</th>
+                        <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الكمية</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant" id="recentTableBody">
+                    <!-- Rendered via JS -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    
-    <div class="overflow-x-auto min-h-[300px]">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">التاريخ</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النوع</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">العنصر</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الكمية</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المستخدم</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200" id="recentTableBody">
-                <!-- Rendered via JS -->
-            </tbody>
-        </table>
+
+    <!-- Quick Actions (1/3 width) -->
+    <div class="bg-white rounded-xl border border-outline-variant shadow-soft p-lg h-fit">
+        <h3 class="font-title-md text-title-md text-on-background mb-md">إجراءات سريعة</h3>
+        <div class="flex flex-col gap-sm">
+            <a href="/transactions/in" class="w-full bg-white border border-outline-variant hover:border-primary/50 p-4 rounded-lg flex items-center gap-md text-right group transition-all-200 hover:shadow-soft">
+                <div class="w-10 h-10 rounded-full bg-primary-container/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                </div>
+                <div>
+                    <span class="block font-label-sm text-label-sm text-on-background">إضافة شحنة جديدة</span>
+                    <span class="block font-caption-xs text-caption-xs text-on-surface-variant">تسجيل واردات جديدة</span>
+                </div>
+            </a>
+            
+            <a href="/transactions/out" class="w-full bg-white border border-outline-variant hover:border-primary/50 p-4 rounded-lg flex items-center gap-md text-right group transition-all-200 hover:shadow-soft">
+                <div class="w-10 h-10 rounded-full bg-primary-container/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">local_shipping</span>
+                </div>
+                <div>
+                    <span class="block font-label-sm text-label-sm text-on-background">صرف مخزون</span>
+                    <span class="block font-caption-xs text-caption-xs text-on-surface-variant">تسجيل خروج بضاعة</span>
+                </div>
+            </a>
+            
+            <a href="/reports" class="w-full bg-white border border-outline-variant hover:border-primary/50 p-4 rounded-lg flex items-center gap-md text-right group transition-all-200 hover:shadow-soft">
+                <div class="w-10 h-10 rounded-full bg-primary-container/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">print</span>
+                </div>
+                <div>
+                    <span class="block font-label-sm text-label-sm text-on-background">طباعة تقرير جرد</span>
+                    <span class="block font-caption-xs text-caption-xs text-on-surface-variant">توليد تقرير بحالة المخزون</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="mt-lg pt-lg border-t border-outline-variant">
+            <p class="font-caption-xs text-caption-xs text-on-surface-variant mb-2">عمليات اليوم</p>
+            <div class="flex items-center justify-between bg-surface-container-low p-3 rounded-lg">
+                <span class="font-body-md text-body-md text-on-background">إجمالي العمليات</span>
+                <span class="font-title-md text-title-md text-primary" id="todayOperationsCount">0</span>
+            </div>
+        </div>
     </div>
 </div>
 
 <template id="stat-card-template">
-    <div class="bg-white rounded-lg shadow p-6 border-r-4">
-        <div class="flex items-center">
-            <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl icon-container ml-4">
-            </div>
-            <div>
-                <p class="text-sm font-medium text-gray-500 truncate stat-title"></p>
-                <div class="flex items-baseline">
-                    <p class="text-2xl font-semibold text-gray-900 stat-value"></p>
-                </div>
-            </div>
+    <div class="bg-white rounded-xl border border-outline-variant p-lg shadow-soft hover:shadow-hover transition-all-200 relative overflow-hidden group">
+        <div class="absolute right-0 top-0 bottom-0 w-1 group-hover:w-1.5 transition-all-200 stat-border-color"></div>
+        <div class="flex justify-between items-start mb-sm">
+            <p class="font-label-sm text-label-sm text-on-surface-variant stat-title"></p>
+            <span class="material-symbols-outlined p-1.5 rounded-md stat-icon-container"></span>
+        </div>
+        <div class="flex items-end gap-sm">
+            <h3 class="font-display-xl text-display-xl text-on-background stat-value"></h3>
+            <span class="font-caption-xs text-caption-xs mb-1 stat-subtitle hidden"></span>
         </div>
     </div>
 </template>
 
+<template id="stat-card-wide-template">
+    <div class="md:col-span-2 bg-white rounded-xl border border-outline-variant p-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center justify-between group relative overflow-hidden">
+        <div class="absolute right-0 top-0 bottom-0 w-1 group-hover:w-1.5 transition-all-200 stat-border-color"></div>
+        <div>
+            <p class="font-label-sm text-label-sm text-on-surface-variant mb-1 stat-title"></p>
+            <h3 class="font-display-xl text-display-xl text-on-background stat-value"></h3>
+        </div>
+        <div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center stat-icon-container">
+            <span class="material-symbols-outlined text-on-surface-variant"></span>
+        </div>
+    </div>
+</template>
+
+<script>
+    // Overriding dashboard.js styling logic right before it runs
+    window.dashboardThemeOverride = {
+        totalProducts: { color: 'text-primary bg-primary-container/10', border: 'bg-primary', icon: 'category' },
+        totalSizes: { color: 'text-secondary bg-secondary-container/20', border: 'bg-secondary', icon: 'straighten' },
+        lowStockShoesCount: { color: 'text-amber-600 bg-amber-50', border: 'bg-amber-500', icon: 'warning', subtitle: 'تنبيه مخزون' },
+        lowStockPackagingCount: { color: 'text-rose-600 bg-rose-50', border: 'bg-rose-500', icon: 'inventory', subtitle: 'عاجل' },
+        totalShoesQuantity: { wide: true, border: 'bg-primary', icon: 'layers' },
+        totalPackagingQuantity: { wide: true, border: 'bg-secondary', icon: 'box' }
+    };
+</script>
 <script src="/js/dashboard.js"></script>

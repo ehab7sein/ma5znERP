@@ -66,26 +66,11 @@ async function remove(req, res, next) {
   }
 }
 
-async function getWithSizes(req, res, next) {
-  try {
-    const id = req.params.id;
-    const products = await Product.getAllWithSizes();
-    const product = products.find(p => p.id === id);
-    if (!product) {
-      return res.status(404).json({ success: false, message: 'الموديل غير موجود' });
-    }
-    return res.json({ success: true, data: product });
-  } catch (error) {
-    next(error);
-  }
-}
-
 module.exports = {
   showPage,
   getAll,
   search,
   create,
   update,
-  delete: remove,
-  getWithSizes
+  delete: remove
 };

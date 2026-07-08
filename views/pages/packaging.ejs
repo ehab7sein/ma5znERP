@@ -1,0 +1,136 @@
+<div class="flex flex-col sm:flex-row justify-between sm:items-end mb-lg gap-4">
+    <div>
+        <h2 class="font-display-xl text-display-xl text-on-background mb-xs">مواد التغليف</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">إدارة مواد التعبئة والتغليف ومتابعة الكميات.</p>
+    </div>
+    <div class="flex gap-sm">
+        <button id="addBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:shadow-hover transition-all-200 scale-98 active:scale-95 flex items-center gap-sm">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            إضافة مادة جديدة
+        </button>
+        <a href="/print/stock" target="_blank" class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">print</span>
+        </a>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden flex flex-col">
+    <div class="overflow-x-auto min-h-[300px]">
+        <table class="w-full text-right">
+            <thead class="bg-slate-50 border-b border-outline-variant">
+                <tr>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الاسم</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الكمية الحالية</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الحد الأدنى</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الحالة</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase text-left w-[250px]">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant" id="packagingTableBody">
+                <!-- Rendered via JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="itemModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+        <div class="fixed inset-0 bg-on-background/50 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="document.getElementById('cancelBtn').click()"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        
+        <div class="inline-block align-bottom bg-white rounded-xl text-right overflow-hidden shadow-hover transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-outline-variant relative">
+            <div class="absolute right-0 top-0 bottom-0 w-1 bg-primary"></div>
+            
+            <form id="itemForm">
+                <div class="bg-white px-lg pt-lg pb-md">
+                    <h3 class="font-title-md text-title-md text-on-background mb-lg flex items-center gap-sm" id="modalTitle">
+                        <span class="material-symbols-outlined text-primary">package_2</span>
+                        إضافة مادة جديدة
+                    </h3>
+                    <input type="hidden" id="itemId" name="id">
+                    
+                    <div class="space-y-md">
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الاسم <span class="text-error">*</span></label>
+                            <input type="text" name="name" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                        </div>
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الكمية الافتتاحية</label>
+                            <input type="number" name="quantity" min="0" value="0" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                        </div>
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الحد الأدنى للتنبيه <span class="text-error">*</span></label>
+                            <input type="number" name="minimum_quantity" min="0" value="5" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-surface-container-lowest px-lg py-md border-t border-outline-variant flex flex-row-reverse gap-sm">
+                    <button type="submit" id="saveBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:shadow-hover transition-all-200">
+                        حفظ
+                    </button>
+                    <button type="button" id="cancelBtn" class="bg-white border border-outline-variant text-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:bg-surface-container-low transition-all-200">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Quantity Modal -->
+<div id="qtyModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" aria-labelledby="qty-modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+        <div class="fixed inset-0 bg-on-background/50 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="closeQtyModal()"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        
+        <div class="inline-block align-bottom bg-white rounded-xl text-right overflow-hidden shadow-hover transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-outline-variant relative">
+            <div class="absolute right-0 top-0 bottom-0 w-1 bg-primary"></div>
+            
+            <form id="qtyForm">
+                <div class="bg-white px-lg pt-lg pb-md">
+                    <h3 class="font-title-md text-title-md text-on-background mb-lg flex items-center gap-sm" id="qtyModalTitle">
+                        <span class="material-symbols-outlined text-primary">add_box</span>
+                        إضافة كمية
+                    </h3>
+                    <input type="hidden" id="qtyItemId">
+                    <input type="hidden" id="qtyAction">
+                    
+                    <div class="space-y-md">
+                        <div id="qtyBalanceContainer" class="bg-primary-container/10 border border-primary/20 rounded-lg p-4 flex items-center justify-between" style="display: none;">
+                            <span class="text-primary font-medium font-body-md">الرصيد الحالي:</span>
+                            <span class="font-title-md text-title-md font-bold text-primary" id="qtyCurrentBalance">0</span>
+                        </div>
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الكمية <span class="text-error">*</span></label>
+                            <input type="number" id="qtyAmount" name="quantity" min="1" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                        </div>
+                        <div id="qtyReasonGroup" class="hidden">
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">سبب الصرف <span class="text-error">*</span></label>
+                            <select id="qtyReason" name="reason" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                                <option value="استخدام">استخدام</option>
+                                <option value="تالف">تالف</option>
+                                <option value="نقل">نقل لمخزن آخر</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">ملاحظات</label>
+                            <textarea id="qtyNotes" name="notes" rows="2" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-surface-container-lowest px-lg py-md border-t border-outline-variant flex flex-row-reverse gap-sm">
+                    <button type="submit" id="qtySaveBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:shadow-hover transition-all-200">
+                        تأكيد
+                    </button>
+                    <button type="button" id="qtyCancelBtn" class="bg-white border border-outline-variant text-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:bg-surface-container-low transition-all-200">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/js/packaging.js"></script>

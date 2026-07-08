@@ -1,0 +1,67 @@
+<div class="flex flex-col sm:flex-row justify-between sm:items-end mb-lg gap-4">
+    <div>
+        <h2 class="font-display-xl text-display-xl text-on-background mb-xs">التقارير</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">إحصائيات متقدمة وتقارير عن حالة المخزون.</p>
+    </div>
+    <div class="flex gap-sm">
+        <a href="/print/stock" target="_blank" class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">print</span>
+            طباعة تقرير المخزون
+        </a>
+        <a href="/print/transactions" target="_blank" class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+            طباعة الحركات
+        </a>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div id="statsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md mb-xl">
+    <!-- Rendered via JS -->
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl">
+    <!-- Category Distribution -->
+    <div class="bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden">
+        <div class="p-lg border-b border-outline-variant bg-surface-container-lowest">
+            <h3 class="font-title-md text-title-md text-on-background">توزيع الموديلات حسب الفئة</h3>
+        </div>
+        <div class="p-lg" id="categoryChart">
+            <p class="text-on-surface-variant font-body-md text-center py-lg">جاري التحميل...</p>
+        </div>
+    </div>
+
+    <!-- Brand Distribution -->
+    <div class="bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden">
+        <div class="p-lg border-b border-outline-variant bg-surface-container-lowest">
+            <h3 class="font-title-md text-title-md text-on-background">توزيع الموديلات حسب العلامة التجارية</h3>
+        </div>
+        <div class="p-lg" id="brandChart">
+            <p class="text-on-surface-variant font-body-md text-center py-lg">جاري التحميل...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Report -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden mt-xl">
+    <div class="p-lg border-b border-outline-variant bg-surface-container-lowest flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+        <h3 class="font-title-md text-title-md text-on-background">التقرير الشهري</h3>
+        <div class="flex items-center gap-sm">
+            <select id="reportMonth" class="bg-white border border-outline-variant rounded-lg py-1.5 px-3 text-label-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary">
+                <% for (let m = 1; m <= 12; m++) { %>
+                    <option value="<%= m %>" <%= m === new Date().getMonth() + 1 ? 'selected' : '' %>><%= ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'][m-1] %></option>
+                <% } %>
+            </select>
+            <input type="number" id="reportYear" value="<%= new Date().getFullYear() %>" min="2020" max="2030" class="bg-white border border-outline-variant rounded-lg py-1.5 px-3 text-label-sm w-20 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary">
+            <button id="loadMonthlyBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-1.5 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">refresh</span>
+                عرض
+            </button>
+        </div>
+    </div>
+    <div class="p-lg" id="monthlyReport">
+        <p class="text-on-surface-variant font-body-md text-center py-lg">اختر الشهر والسنة لعرض التقرير</p>
+    </div>
+</div>
+
+<script src="/js/reports.js"></script>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير المخزون - نظام إدارة المخزون</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/print.css">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            padding: 20px 30px;
+            background: white;
+            color: #1b1b24;
+        }
+        .print-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .print-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+            color: #1b1b24;
+        }
+        .print-header .print-date {
+            font-size: 11px;
+            color: #666;
+        }
+        .print-summary {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .print-summary-item {
+            flex: 1;
+            min-width: 120px;
+            border: 1px solid #ddd;
+            padding: 10px 14px;
+            text-align: center;
+            border-radius: 6px;
+        }
+        .print-summary-item .label {
+            font-size: 11px;
+            color: #666;
+            margin: 0;
+        }
+        .print-summary-item .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1b1b24;
+            margin: 4px 0 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin: 12px 0;
+        }
+        th, td {
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            text-align: right;
+        }
+        th {
+            background: #f0f0f0;
+            font-weight: 600;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #222;
+        }
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+        tbody tr:nth-child(even) td {
+            background: #f9f9f9;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            border-bottom: 1px solid #222;
+            padding-bottom: 4px;
+            margin: 24px 0 10px;
+            color: #1b1b24;
+        }
+        .chip-print {
+            display: inline-block;
+            padding: 1px 8px;
+            border: 1px solid #888;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: 600;
+        }
+        .chip-ok { border-color: #22a67e; color: #166b50; }
+        .chip-warn { border-color: #d97706; color: #92400e; }
+        .chip-error { border-color: #dc2626; color: #991b1b; }
+        .text-success { color: #166b50; }
+        .text-warning { color: #92400e; }
+        .text-danger { color: #991b1b; }
+        .fw-bold { font-weight: 700; }
+        .print-footer {
+            text-align: center;
+            font-size: 8px;
+            color: #999;
+            border-top: 1px solid #ddd;
+            padding-top: 6px;
+            margin-top: 24px;
+        }
+        .print-no-print { display: none; }
+    </style>
+</head>
+<body>
+    <div class="print-header">
+        <div>
+            <h1>تقرير جرد المخزون</h1>
+        </div>
+        <div class="print-date">
+            تاريخ التقرير: <%= printDate %>
+        </div>
+    </div>
+
+    <div class="print-summary">
+        <div class="print-summary-item">
+            <p class="label">إجمالي الموديلات</p>
+            <p class="value"><%= products.length %></p>
+        </div>
+        <div class="print-summary-item">
+            <p class="label">إجمالي كمية الأحذية</p>
+            <p class="value"><%= totalShoesQty %></p>
+        </div>
+        <div class="print-summary-item">
+            <p class="label">إجمالي مواد التعبئة</p>
+            <p class="value"><%= totalPackagingQty %></p>
+        </div>
+        <div class="print-summary-item">
+            <p class="label">منخفضة (أحذية)</p>
+            <p class="value" style="color: <%= lowStockShoesCount > 0 ? '#92400e' : '#166b50' %>"><%= lowStockShoesCount %></p>
+        </div>
+        <div class="print-summary-item">
+            <p class="label">منخفضة (تعبئة)</p>
+            <p class="value" style="color: <%= lowStockPackagingCount > 0 ? '#92400e' : '#166b50' %>"><%= lowStockPackagingCount %></p>
+        </div>
+    </div>
+
+    <h2 class="section-title">الموديلات والمقاسات</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الموديل</th>
+                <th>الفئة</th>
+                <th>اللون</th>
+                <th>العلامة</th>
+                <th>المقاس</th>
+                <th>الكمية</th>
+                <th>الحد الأدنى</th>
+                <th>الحالة</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let rowNum = 0; %>
+            <% products.forEach(product => { %>
+                <% const sizes = product.product_sizes || []; %>
+                <% if (sizes.length === 0) { %>
+                    <tr>
+                        <td><%= ++rowNum %></td>
+                        <td><%= product.model_name %></td>
+                        <td><%= product.category %></td>
+                        <td><%= product.color || '-' %></td>
+                        <td><%= product.brand || '-' %></td>
+                        <td colspan="4" style="color: #999; text-align: center;">لا توجد مقاسات</td>
+                    </tr>
+                <% } else { %>
+                    <% sizes.forEach((size, idx) => { %>
+                        <tr>
+                            <% if (idx === 0) { %>
+                                <td rowspan="<%= sizes.length %>"><%= ++rowNum %></td>
+                                <td rowspan="<%= sizes.length %>"><%= product.model_name %></td>
+                                <td rowspan="<%= sizes.length %>"><%= product.category %></td>
+                                <td rowspan="<%= sizes.length %>"><%= product.color || '-' %></td>
+                                <td rowspan="<%= sizes.length %>"><%= product.brand || '-' %></td>
+                            <% } %>
+                            <td>مقاس <%= size.size %></td>
+                            <td class="fw-bold <%= size.quantity === 0 ? 'text-danger' : (size.quantity <= size.minimum_quantity ? 'text-warning' : 'text-success') %>"><%= size.quantity %></td>
+                            <td><%= size.minimum_quantity %></td>
+                            <td>
+                                <% if (size.quantity === 0) { %>
+                                    <span class="chip-print chip-error">نفد</span>
+                                <% } else if (size.quantity <= size.minimum_quantity) { %>
+                                    <span class="chip-print chip-warn">منخفض</span>
+                                <% } else { %>
+                                    <span class="chip-print chip-ok">متوفر</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">مواد التعبئة والتغليف</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الاسم</th>
+                <th>الكمية</th>
+                <th>الحد الأدنى</th>
+                <th>الحالة</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% packagingItems.forEach((item, idx) => { %>
+                <tr>
+                    <td><%= idx + 1 %></td>
+                    <td><%= item.name %></td>
+                    <td class="fw-bold <%= item.quantity === 0 ? 'text-danger' : (item.quantity <= item.minimum_quantity ? 'text-warning' : 'text-success') %>"><%= item.quantity %></td>
+                    <td><%= item.minimum_quantity %></td>
+                    <td>
+                        <% if (item.quantity === 0) { %>
+                            <span class="chip-print chip-error">نفد</span>
+                        <% } else if (item.quantity <= item.minimum_quantity) { %>
+                            <span class="chip-print chip-warn">منخفض</span>
+                        <% } else { %>
+                            <span class="chip-print chip-ok">متوفر</span>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <div class="print-footer">
+        نظام إدارة المخزون — تقرير جرد المخزون — تم الإنشاء: <%= printDate %> — صفحة 1
+    </div>
+
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
+</body>
+</html>

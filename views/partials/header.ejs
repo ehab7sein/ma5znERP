@@ -1,24 +1,45 @@
-<header class="bg-white shadow-sm h-16 flex items-center justify-between px-6 z-10 flex-shrink-0">
-    <div class="flex items-center">
-        <!-- Mobile menu button -->
-        <button id="mobileMenuBtn" class="md:hidden text-gray-500 hover:text-indigo-600 focus:outline-none ml-4">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 right-0 h-16 z-30 bg-white/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant shadow-sm flex items-center justify-between px-md lg:px-2xl lg:mr-[280px] rtl">
+    
+    <div class="flex items-center gap-md">
+        <!-- Mobile Sidebar Toggle -->
+        <button id="sidebarToggleBtn" class="lg:hidden text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 focus:ring-2 focus:ring-primary-container flex items-center justify-center">
+            <span class="material-symbols-outlined">menu</span>
         </button>
-        
-        <!-- Breadcrumbs -->
-        <div class="hidden sm:flex text-sm text-gray-500 font-medium" id="breadcrumbs">
-            <!-- Dynamically populated -->
+
+        <span class="font-title-md text-title-md font-bold text-on-surface hidden sm:block">
+            <%= typeof title !== 'undefined' ? title : 'نظام إدارة المستودع' %>
+        </span>
+        <div class="hidden sm:block h-6 w-px bg-outline-variant mx-sm"></div>
+        <div class="hidden md:flex gap-md">
+            <a href="/dashboard" class="text-primary font-bold border-b-2 border-primary pb-1 transition-colors">الرئيسية</a>
+            <a href="/products" class="text-on-surface-variant hover:text-primary transition-colors">المخازن</a>
+            <a href="#" class="text-on-surface-variant hover:text-primary transition-colors">الإعدادات</a>
         </div>
     </div>
     
-    <div class="flex items-center space-x-4 space-x-reverse">
-        <div class="flex items-center">
-            <span class="text-sm font-medium text-gray-700 ml-2"><%= (typeof user !== 'undefined' && user.username) ? user.username : 'مدير النظام' %></span>
-            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
-                <%= (typeof user !== 'undefined' && user.username) ? user.username.charAt(0).toUpperCase() : 'U' %>
-            </div>
+    <div class="flex items-center gap-md">
+        <!-- Search placeholder -->
+        <div class="relative hidden lg:block">
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+            <input type="text" placeholder="بحث..." class="pl-3 pr-10 py-1.5 bg-surface-container-low border border-outline-variant rounded-full text-label-sm focus:ring-2 focus:ring-primary-container focus:border-primary transition-all-200 w-64 text-on-surface">
+        </div>
+        
+        <div class="flex items-center gap-sm">
+            <button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-all focus:ring-2 focus:ring-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-all focus:ring-2 focus:ring-primary-container flex items-center justify-center hidden sm:flex">
+                <span class="material-symbols-outlined">calendar_today</span>
+            </button>
+            <button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-all focus:ring-2 focus:ring-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined">help_outline</span>
+            </button>
+        </div>
+        
+        <div class="h-8 w-8 rounded-full bg-primary-container/20 overflow-hidden ml-sm cursor-pointer border border-outline-variant flex items-center justify-center flex-shrink-0">
+            <!-- User avatar placeholder -->
+            <span class="material-symbols-outlined text-primary-container font-medium text-[20px]">person</span>
         </div>
     </div>
-</header>
+</nav>

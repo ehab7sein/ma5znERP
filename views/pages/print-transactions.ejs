@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل الحركات - نظام إدارة المخزون</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/print.css">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            padding: 20px 30px;
+            background: white;
+            color: #1b1b24;
+        }
+        .print-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .print-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+            color: #1b1b24;
+        }
+        .print-header .print-date {
+            font-size: 11px;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+            margin: 12px 0;
+        }
+        th, td {
+            padding: 5px 7px;
+            border: 1px solid #ccc;
+            text-align: right;
+        }
+        th {
+            background: #f0f0f0;
+            font-weight: 600;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #222;
+        }
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+        tbody tr:nth-child(even) td {
+            background: #f9f9f9;
+        }
+        .chip-print {
+            display: inline-block;
+            padding: 1px 7px;
+            border: 1px solid #888;
+            border-radius: 3px;
+            font-size: 7.5px;
+            font-weight: 600;
+        }
+        .chip-in { border-color: #22a67e; color: #166b50; }
+        .chip-out { border-color: #dc2626; color: #991b1b; }
+        .chip-shoe { border-color: #4f46e5; color: #3730a3; }
+        .chip-pack { border-color: #d97706; color: #92400e; }
+        .text-in { color: #166b50; font-weight: 700; }
+        .text-out { color: #991b1b; font-weight: 700; }
+        .print-footer {
+            text-align: center;
+            font-size: 8px;
+            color: #999;
+            border-top: 1px solid #ddd;
+            padding-top: 6px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="print-header">
+        <div>
+            <h1>سجل حركات المخزون</h1>
+        </div>
+        <div class="print-date">
+            تاريخ التقرير: <%= printDate %>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>التاريخ</th>
+                <th>العملية</th>
+                <th>النوع</th>
+                <th>الكمية</th>
+                <th>الرصيد قبل</th>
+                <th>الرصيد بعد</th>
+                <th>المورد/المستلم</th>
+                <th>السبب</th>
+                <th>ملاحظات</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (transactions.length === 0) { %>
+                <tr>
+                    <td colspan="10" style="text-align: center; color: #999;">لا توجد حركات</td>
+                </tr>
+            <% } else { %>
+                <% transactions.forEach((tx, idx) => { %>
+                    <tr>
+                        <td><%= idx + 1 %></td>
+                        <td><%= new Date(tx.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></td>
+                        <td><span class="chip-print <%= tx.transaction_type === 'IN' ? 'chip-in' : 'chip-out' %>"><%= tx.transaction_type === 'IN' ? 'إضافة' : 'صرف' %></span></td>
+                        <td><span class="chip-print <%= tx.item_type === 'shoe' ? 'chip-shoe' : 'chip-pack' %>"><%= tx.item_type === 'shoe' ? 'حذاء' : 'تعبئة' %></span></td>
+                        <td class="<%= tx.transaction_type === 'IN' ? 'text-in' : 'text-out' %>"><%= tx.quantity %></td>
+                        <td><%= tx.balance_before %></td>
+                        <td><%= tx.balance_after %></td>
+                        <td><%= tx.supplier_or_receiver || '-' %></td>
+                        <td><%= tx.reason || '-' %></td>
+                        <td><%= tx.notes || '-' %></td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+
+    <div class="print-footer">
+        نظام إدارة المخزون — سجل الحركات — تم الإنشاء: <%= printDate %>
+    </div>
+
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
+</body>
+</html>

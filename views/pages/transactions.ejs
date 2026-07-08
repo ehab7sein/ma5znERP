@@ -1,0 +1,91 @@
+<div class="flex flex-col sm:flex-row justify-between sm:items-end mb-lg gap-4">
+    <div>
+        <h2 class="font-display-xl text-display-xl text-on-background mb-xs">سجل الحركات</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">عرض وفلترة جميع حركات المخزون (إضافة / صرف).</p>
+    </div>
+    <a href="/print/transactions" target="_blank" class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+        <span class="material-symbols-outlined text-[18px]">print</span>
+        طباعة
+    </a>
+</div>
+
+<!-- Filters -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-soft p-lg mb-lg">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-md items-end">
+        <div>
+            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">نوع العملية</label>
+            <select id="filterType" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                <option value="">الكل</option>
+                <option value="IN">إضافة</option>
+                <option value="OUT">صرف</option>
+            </select>
+        </div>
+        <div>
+            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">نوع العنصر</label>
+            <select id="filterItemType" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+                <option value="">الكل</option>
+                <option value="shoe">أحذية</option>
+                <option value="packaging">مواد تعبئة</option>
+            </select>
+        </div>
+        <div>
+            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">من تاريخ</label>
+            <input type="date" id="filterDateFrom" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+        </div>
+        <div>
+            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">إلى تاريخ</label>
+            <input type="date" id="filterDateTo" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
+        </div>
+        <div class="flex gap-sm">
+            <button id="applyFiltersBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">search</span>
+                تطبيق
+            </button>
+            <button id="clearFiltersBtn" class="bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:bg-surface-container-low transition-all-200 flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                مسح
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Transactions Table -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden flex flex-col">
+    <div class="overflow-x-auto min-h-[300px]">
+        <table class="w-full text-right">
+            <thead class="bg-slate-50 border-b border-outline-variant">
+                <tr>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">التاريخ</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">العملية</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">النوع</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الكمية</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الرصيد قبل</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الرصيد بعد</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">المورد/المستلم</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">السبب</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">ملاحظات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant" id="transactionsTableBody">
+                <!-- Rendered via JS -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination -->
+    <div class="p-lg border-t border-outline-variant bg-surface-container-lowest flex flex-col sm:flex-row justify-between items-center gap-md">
+        <span class="font-body-md text-body-md text-on-surface-variant" id="paginationInfo">0 نتيجة</span>
+        <div class="flex items-center gap-sm">
+            <button id="prevPageBtn" class="bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm py-1.5 px-3 rounded-lg shadow-soft hover:bg-surface-container-low transition-all-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                السابق
+            </button>
+            <span class="font-body-md text-body-md text-on-background px-sm" id="pageIndicator">1 / 1</span>
+            <button id="nextPageBtn" class="bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm py-1.5 px-3 rounded-lg shadow-soft hover:bg-surface-container-low transition-all-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-xs">
+                التالي
+                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/transactions.js"></script>

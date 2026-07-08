@@ -41,16 +41,27 @@ app.use(session({
   }
 }));
 
-const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const productsRoutes = require('./routes/products');
 const sizesRoutes = require('./routes/sizes');
+const stockInRoutes = require('./routes/stockIn');
+const stockOutRoutes = require('./routes/stockOut');
+const transactionsRoutes = require('./routes/transactions');
+const packagingRoutes = require('./routes/packaging');
+const reportsRoutes = require('./routes/reports');
+const printRoutes = require('./routes/print');
 
 app.use(setUserLocals);
 app.use(authRoutes);
 app.use(dashboardRoutes);
 app.use(productsRoutes);
 app.use(sizesRoutes);
+app.use(stockInRoutes);
+app.use(stockOutRoutes);
+app.use(transactionsRoutes);
+app.use(packagingRoutes);
+app.use(reportsRoutes);
+app.use(printRoutes);
 
 app.get('/', (req, res) => {
   res.status(200).json({

@@ -1,33 +1,41 @@
-<div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-    <h1 class="text-2xl font-bold text-gray-800">موديلات الأحذية</h1>
-    <button id="addBtn" class="bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-700 transition-colors flex items-center">
-        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        إضافة موديل جديد
-    </button>
+<div class="flex flex-col sm:flex-row justify-between sm:items-end mb-lg gap-4">
+    <div>
+        <h2 class="font-display-xl text-display-xl text-on-background mb-xs">موديلات الأحذية</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">إدارة موديلات الأحذية والمقاسات التابعة لها.</p>
+    </div>
+    <div class="flex gap-sm">
+        <button id="addBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:shadow-hover transition-all-200 scale-98 active:scale-95 flex items-center gap-sm">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            إضافة موديل جديد
+        </button>
+        <a href="/print/stock" target="_blank" class="bg-white border border-outline-variant text-secondary font-label-sm text-label-sm py-2 px-4 rounded-lg shadow-soft hover:shadow-hover transition-all-200 flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">print</span>
+        </a>
+    </div>
 </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
+<div class="bg-white rounded-xl border border-outline-variant shadow-soft overflow-hidden flex flex-col">
     <!-- Search Bar -->
-    <div class="p-4 border-b border-gray-200 bg-gray-50 flex items-center">
+    <div class="p-4 border-b border-outline-variant bg-surface-container-lowest flex items-center">
         <div class="relative w-full max-w-md">
-            <input type="text" id="searchInput" placeholder="ابحث باسم الموديل، الفئة، أو اللون... (Ctrl+K)" class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-            <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+            <input type="text" id="searchInput" placeholder="ابحث باسم الموديل، الفئة، أو اللون... (Ctrl+K)" class="w-full pl-4 pr-10 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-label-sm focus:ring-2 focus:ring-primary-container focus:border-primary transition-all-200">
         </div>
     </div>
     
     <div class="overflow-x-auto min-h-[300px]">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+        <table class="w-full text-right">
+            <thead class="bg-slate-50 border-b border-outline-variant">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">اسم الموديل</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الفئة</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">اللون</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المقاسات</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">إجمالي الكمية</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">إجراءات</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">اسم الموديل</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">الفئة</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">اللون</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">المقاسات</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase">إجمالي الكمية</th>
+                    <th class="py-3 px-lg font-label-sm text-label-sm text-secondary uppercase text-left w-[150px]">إجراءات</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200" id="productsTableBody">
+            <tbody class="divide-y divide-outline-variant" id="productsTableBody">
                 <!-- Data rendered via JS -->
             </tbody>
         </table>
@@ -35,24 +43,30 @@
 </div>
 
 <!-- Modal Form -->
-<div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+<div id="productModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+        <div class="fixed inset-0 bg-on-background/50 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="document.getElementById('cancelBtn').click()"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        
+        <div class="inline-block align-bottom bg-white rounded-xl text-right overflow-hidden shadow-hover transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-outline-variant relative">
+            <div class="absolute right-0 top-0 bottom-0 w-1 bg-primary"></div>
+            
             <form id="productForm">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modalTitle">إضافة موديل جديد</h3>
+                <div class="bg-white px-lg pt-lg pb-md">
+                    <h3 class="font-title-md text-title-md text-on-background mb-lg flex items-center gap-sm" id="modalTitle">
+                        <span class="material-symbols-outlined text-primary">edit_square</span>
+                        إضافة موديل جديد
+                    </h3>
                     <input type="hidden" id="productId" name="id">
                     
-                    <div class="space-y-4">
+                    <div class="space-y-md">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">اسم الموديل <span class="text-red-500">*</span></label>
-                            <input type="text" name="model_name" required class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">اسم الموديل <span class="text-error">*</span></label>
+                            <input type="text" name="model_name" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">الفئة <span class="text-red-500">*</span></label>
-                            <select name="category" required class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الفئة <span class="text-error">*</span></label>
+                            <select name="category" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
                                 <option value="">اختر الفئة...</option>
                                 <option value="رجالي">رجالي</option>
                                 <option value="حريمي">حريمي</option>
@@ -61,30 +75,30 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">اللون <span class="text-red-500">*</span></label>
-                            <input type="text" name="color" required class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">اللون <span class="text-error">*</span></label>
+                            <input type="text" name="color" required class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-md">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">الخامة</label>
-                                <input type="text" name="material" class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">الخامة</label>
+                                <input type="text" name="material" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">العلامة التجارية</label>
-                                <input type="text" name="brand" class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">العلامة التجارية</label>
+                                <input type="text" name="brand" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">ملاحظات</label>
-                            <textarea name="notes" rows="2" class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">ملاحظات</label>
+                            <textarea name="notes" rows="2" class="w-full bg-white border border-outline-variant rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary text-body-md transition-all"></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="submit" id="saveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mr-3 sm:w-auto sm:text-sm">
+                <div class="bg-surface-container-lowest px-lg py-md border-t border-outline-variant flex flex-row-reverse gap-sm">
+                    <button type="submit" id="saveBtn" class="bg-primary text-on-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:shadow-hover transition-all-200">
                         حفظ
                     </button>
-                    <button type="button" id="cancelBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                    <button type="button" id="cancelBtn" class="bg-white border border-outline-variant text-primary font-label-sm text-label-sm py-2 px-6 rounded-lg shadow-soft hover:bg-surface-container-low transition-all-200">
                         إلغاء
                     </button>
                 </div>
@@ -93,4 +107,15 @@
     </div>
 </div>
 
+<script>
+    // Overriding table styles in products.js via CSS classes config
+    window.themeClasses = {
+        tableRow: 'hover:bg-slate-50 transition-colors cursor-pointer group',
+        tdText: 'py-3 px-lg text-body-md text-on-background group-hover:text-primary transition-colors',
+        tdMuted: 'py-3 px-lg text-body-md text-on-surface-variant',
+        chip: 'bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full text-caption-xs font-bold inline-block',
+        btnEdit: 'text-primary hover:bg-primary-container/10 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px] ml-1',
+        btnDelete: 'text-error hover:bg-error-container/20 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px]'
+    };
+</script>
 <script src="/js/products.js"></script>

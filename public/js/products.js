@@ -29,13 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderTable(products) {
         tableBody.innerHTML = '';
         if (products.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">لا توجد موديلات</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="6" class="py-12 px-lg text-center text-on-surface-variant font-body-md">لا توجد موديلات</td></tr>`;
             return;
         }
+        
+        const tc = window.themeClasses || {};
 
         products.forEach(p => {
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-gray-50 transition-colors cursor-pointer group';
+            tr.className = tc.tableRow || '';
             tr.onclick = (e) => {
                 if (!e.target.closest('button')) {
                     window.location.href = `/products/${p.id}/sizes`;
@@ -43,16 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             tr.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600 group-hover:text-indigo-800">${p.model_name}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${p.category}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${p.color}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-semibold">${p.sizes_count} مقاس</span>
+                <td class="${tc.tdText}">${p.model_name}</td>
+                <td class="${tc.tdMuted}">${p.category}</td>
+                <td class="${tc.tdMuted}">${p.color}</td>
+                <td class="${tc.tdMuted}">
+                    <span class="${tc.chip}">${p.sizes_count} مقاس</span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold ${p.total_quantity > 0 ? 'text-green-600' : 'text-gray-400'}">${p.total_quantity}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button class="text-indigo-600 hover:text-indigo-900 ml-3 edit-btn" data-id="${p.id}">تعديل</button>
-                    <button class="text-red-600 hover:text-red-900 delete-btn" data-id="${p.id}" data-name="${p.model_name}">حذف</button>
+                <td class="${tc.tdText} ${p.total_quantity > 0 ? 'text-emerald-600' : 'text-outline-variant'}">${p.total_quantity}</td>
+                <td class="${tc.tdMuted} text-left">
+                    <button class="${tc.btnEdit} edit-btn" data-id="${p.id}">edit</button>
+                    <button class="${tc.btnDelete} delete-btn" data-id="${p.id}" data-name="${p.model_name}">delete</button>
                 </td>
             `;
             tableBody.appendChild(tr);

@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (refreshBtn) {
             refreshBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            refreshBtn.querySelector('svg').classList.add('animate-spin');
+            const refreshIcon = refreshBtn.querySelector('.material-symbols-outlined');
+            if (refreshIcon) refreshIcon.classList.add('animate-spin');
         }
 
         try {
@@ -52,7 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             if (refreshBtn) {
                 refreshBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                refreshBtn.querySelector('svg').classList.remove('animate-spin');
+                const refreshIcon = refreshBtn.querySelector('.material-symbols-outlined');
+                if (refreshIcon) refreshIcon.classList.remove('animate-spin');
             }
         }
     }
@@ -60,55 +62,84 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderStats(stats) {
         statsGrid.innerHTML = '';
         const template = document.getElementById('stat-card-template');
+        const wideTemplate = document.getElementById('stat-card-wide-template');
+        
+        const overrides = window.dashboardThemeOverride || {};
 
         statCardsConfig.forEach(config => {
-            const clone = template.content.cloneNode(true);
-            const card = clone.querySelector('div');
-            const iconContainer = clone.querySelector('.icon-container');
+            const override = overrides[config.id] || {};
+            const isWide = override.wide;
+            
+            const clone = (isWide ? wideTemplate : template).content.cloneNode(true);
             const title = clone.querySelector('.stat-title');
             const value = clone.querySelector('.stat-value');
+            const iconContainer = clone.querySelector('.stat-icon-container');
+            const borderColor = clone.querySelector('.stat-border-color');
+            const icon = clone.querySelector('.material-symbols-outlined');
+            const subtitle = clone.querySelector('.stat-subtitle');
 
-            card.classList.add(config.border);
-            iconContainer.classList.add(config.color, config.text);
-            iconContainer.textContent = config.icon;
             title.textContent = config.title;
             value.textContent = stats[config.id] || 0;
+            
+            if (icon) icon.textContent = override.icon || 'analytics';
+            
+            if (override.border && borderColor) {
+                borderColor.classList.add(override.border);
+            }
+            
+            if (!isWide && override.color && iconContainer) {
+                const colors = override.color.split(' ');
+                colors.forEach(c => iconContainer.classList.add(c));
+            }
+
+            if (subtitle && override.subtitle) {
+                subtitle.textContent = override.subtitle;
+                subtitle.classList.remove('hidden');
+                
+                // Inherit text color from icon container text color
+                const textCol = (override.color || '').match(/text-[a-z]+-[0-9]+/);
+                if (textCol) subtitle.classList.add(textCol[0]);
+            }
 
             statsGrid.appendChild(clone);
         });
+        
+        const operationsCountEl = document.getElementById('todayOperationsCount');
+        if (operationsCountEl) {
+            operationsCountEl.textContent = stats.dailyTransactionsCount || 0;
+        }
     }
 
     function renderRecent(transactions) {
         recentTableBody.innerHTML = '';
         
         if (!transactions || transactions.length === 0) {
-            recentTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">لا توجد حركات حديثة</td></tr>`;
+            recentTableBody.innerHTML = `<tr><td colspan="4" class="py-12 text-center text-on-surface-variant font-body-md">لا توجد حركات حديثة</td></tr>`;
             return;
         }
 
         transactions.forEach(tx => {
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-gray-50 transition-colors';
+            tr.className = 'hover:bg-slate-50 transition-colors group';
             
             const date = new Date(tx.created_at).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' });
             
             let typeHtml = '';
             if (tx.transaction_type === 'IN') {
-                typeHtml = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">إضافة</span>`;
+                typeHtml = `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-caption-xs font-bold inline-block">إضافة</span>`;
             } else {
-                typeHtml = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">صرف</span>`;
+                typeHtml = `<span class="bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full text-caption-xs font-bold inline-block">صرف</span>`;
             }
 
             let itemTypeHtml = tx.item_type === 'shoe' ? 'حذاء' : 'مواد تعبئة';
 
             tr.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${typeHtml}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemTypeHtml}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${tx.transaction_type === 'IN' ? 'text-green-600' : 'text-red-600'}">
+                <td class="py-3 px-lg text-body-md text-on-background">${date}</td>
+                <td class="py-3 px-lg text-body-md">${typeHtml}</td>
+                <td class="py-3 px-lg text-body-md text-on-background">${itemTypeHtml}</td>
+                <td class="py-3 px-lg text-body-md font-bold ${tx.transaction_type === 'IN' ? 'text-emerald-600' : 'text-rose-600'}">
                     ${tx.transaction_type === 'IN' ? '+' : '-'}${tx.quantity}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${tx.created_by || 'النظام'}</td>
             `;
             recentTableBody.appendChild(tr);
         });
