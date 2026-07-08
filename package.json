@@ -1,0 +1,26 @@
+﻿{
+  "name": "ma5znerp",
+  "version": "1.0.0",
+  "description": "نظام إدارة مخزن الأحذية - Warehouse Management System for Shoes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["erp", "warehouse", "inventory", "shoes", "express", "supabase"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "morgan": "^1.10.0"
+  }
+}
