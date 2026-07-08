@@ -134,10 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let itemTypeHtml = tx.item_type === 'shoe' ? 'حذاء' : 'مواد تعبئة';
 
             tr.innerHTML = `
-                <td class="py-3 px-lg text-body-md text-on-background">${date}</td>
-                <td class="py-3 px-lg text-body-md">${typeHtml}</td>
-                <td class="py-3 px-lg text-body-md text-on-background">${itemTypeHtml}</td>
-                <td class="py-3 px-lg text-body-md font-bold ${tx.transaction_type === 'IN' ? 'text-emerald-600' : 'text-rose-600'}">
+                <td data-label="التاريخ" class="py-3 px-lg text-body-md text-on-background">${date}</td>
+                <td data-label="النوع" class="py-3 px-lg text-body-md">${typeHtml}</td>
+                <td data-label="العنصر" class="py-3 px-lg text-body-md text-on-background">${itemTypeHtml}</td>
+                <td data-label="الكمية" class="py-3 px-lg text-body-md font-bold ${tx.transaction_type === 'IN' ? 'text-emerald-600' : 'text-rose-600'}">
                     ${tx.transaction_type === 'IN' ? '+' : '-'}${tx.quantity}
                 </td>
             `;

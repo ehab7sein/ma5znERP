@@ -115,18 +115,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const qtyColor = tx.transaction_type === 'IN' ? 'text-emerald-600' : 'text-rose-600';
 
             tr.innerHTML = `
-                <td class="py-3 px-lg text-body-md text-on-surface-variant text-nowrap">${formatDate(tx.created_at)}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${formatTime(tx.created_at)}</td>
-                <td class="py-3 px-lg">${getStatusChip(tx.transaction_type)}</td>
-                <td class="py-3 px-lg">${getItemTypeChip(tx.item_type)}</td>
-                <td class="py-3 px-lg text-body-md text-on-background font-bold">${tx.item_name || '-'}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.size || '-'}</td>
-                <td class="py-3 px-lg text-body-md font-bold ${qtyColor}">${tx.quantity}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.balance_before}</td>
-                <td class="py-3 px-lg text-body-md text-on-background font-bold">${tx.balance_after}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.username || '-'}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${tx.supplier_or_receiver || '-'}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant max-w-[120px] truncate" title="${tx.notes || ''}">${tx.notes || '-'}</td>`;
+                <td data-label="التاريخ" class="py-3 px-lg text-body-md text-on-surface-variant text-nowrap">${formatDate(tx.created_at)}</td>
+                <td data-label="الوقت" class="py-3 px-lg text-body-md text-on-surface-variant">${formatTime(tx.created_at)}</td>
+                <td data-label="العملية" class="py-3 px-lg">${getStatusChip(tx.transaction_type)}</td>
+                <td data-label="النوع" class="py-3 px-lg">${getItemTypeChip(tx.item_type)}</td>
+                <td data-label="العنصر" class="py-3 px-lg text-body-md text-on-background font-bold">${tx.item_name || '-'}</td>
+                <td data-label="المقاس" class="py-3 px-lg text-body-md text-on-surface-variant">${tx.size || '-'}</td>
+                <td data-label="الكمية" class="py-3 px-lg text-body-md font-bold ${qtyColor}">${tx.quantity}</td>
+                <td data-label="الرصيد قبل" class="py-3 px-lg text-body-md text-on-surface-variant">${tx.balance_before}</td>
+                <td data-label="الرصيد بعد" class="py-3 px-lg text-body-md text-on-background font-bold">${tx.balance_after}</td>
+                <td data-label="المستخدم" class="py-3 px-lg text-body-md text-on-surface-variant">${tx.username || '-'}</td>
+                <td data-label="المورد" class="py-3 px-lg text-body-md text-on-surface-variant">${tx.supplier_or_receiver || '-'}</td>
+                <td data-label="ملاحظات" class="py-3 px-lg text-body-md text-on-surface-variant max-w-[120px] truncate" title="${tx.notes || ''}">${tx.notes || '-'}</td>`;
 
             tableBody.appendChild(tr);
         });

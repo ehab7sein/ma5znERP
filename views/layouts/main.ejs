@@ -5,9 +5,10 @@
 
     <% if (isAuthenticated) { %>
         <%- include('../partials/sidebar') %>
+        <%- include('../partials/header') %>
         
         <!-- Main Content Area with RTL offset -->
-        <main class="mr-0 lg:mr-[280px] min-h-screen p-lg lg:p-2xl transition-all duration-300">
+        <main class="mr-0 lg:mr-[280px] pt-16 min-h-screen p-md lg:p-2xl transition-all duration-300">
             <%- body %>
         </main>
     <% } else { %>

@@ -87,11 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             tr.innerHTML = `
-                <td class="py-3 px-lg text-body-md text-on-background font-bold">${item.name}</td>
-                <td class="py-3 px-lg text-body-md font-bold ${qtyColor}">${item.quantity}</td>
-                <td class="py-3 px-lg text-body-md text-on-surface-variant">${item.minimum_quantity}</td>
-                <td class="py-3 px-lg">${chipHtml}</td>
-                <td class="py-3 px-lg text-left whitespace-nowrap">
+                <td data-label="الاسم" class="py-3 px-lg text-body-md text-on-background font-bold">${item.name}</td>
+                <td data-label="الكمية" class="py-3 px-lg text-body-md font-bold ${qtyColor}">${item.quantity}</td>
+                <td data-label="الحد الأدنى" class="py-3 px-lg text-body-md text-on-surface-variant">${item.minimum_quantity}</td>
+                <td data-label="الحالة" class="py-3 px-lg">${chipHtml}</td>
+                <td data-label="" class="py-3 px-lg text-left whitespace-nowrap">
                     <button class="text-emerald-600 hover:bg-emerald-50 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px] ml-1 qty-in-btn" data-id="${item.id}" title="إضافة كمية">add_circle</button>
                     <button class="text-amber-600 hover:bg-amber-50 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px] ml-1 qty-out-btn" data-id="${item.id}" title="صرف كمية">remove_circle</button>
                     <button class="text-primary hover:bg-primary-container/10 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px] ml-1 edit-btn" data-id="${item.id}" title="تعديل">edit</button>

@@ -87,11 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const qtyColor = isEmpty ? 'text-error' : isLowStock ? 'text-amber-600' : 'text-emerald-600';
 
             tr.innerHTML = `
-                <td class="${tc.tdText || 'py-3 px-lg text-body-md text-on-background font-bold'}">${s.size}</td>
-                <td class="py-3 px-lg text-body-md font-bold ${qtyColor}">${s.quantity}</td>
-                <td class="${tc.tdMuted || 'py-3 px-lg text-body-md text-on-surface-variant'}">${s.minimum_quantity}</td>
-                <td class="py-3 px-lg">${chipHtml}</td>
-                <td class="py-3 px-lg">
+                <td data-label="المقاس" class="${tc.tdText || 'py-3 px-lg text-body-md text-on-background font-bold'}">${s.size}</td>
+                <td data-label="الكمية" class="py-3 px-lg text-body-md font-bold ${qtyColor}">${s.quantity}</td>
+                <td data-label="الحد الأدنى" class="${tc.tdMuted || 'py-3 px-lg text-body-md text-on-surface-variant'}">${s.minimum_quantity}</td>
+                <td data-label="الحالة" class="py-3 px-lg">${chipHtml}</td>
+                <td data-label="" class="py-3 px-lg">
                     <button class="${tc.btnEdit || 'text-primary hover:bg-primary-container/10 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px] ml-1'} edit-btn" data-id="${s.id}">edit</button>
                     <button class="${tc.btnDelete || 'text-error hover:bg-error-container/20 p-1.5 rounded-md transition-colors material-symbols-outlined text-[20px]'} delete-btn" data-id="${s.id}" data-size="${s.size}">delete</button>
                 </td>`;

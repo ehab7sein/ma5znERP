@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             tr.innerHTML = `
-                <td class="${tc.tdText}">${p.model_name}</td>
-                <td class="${tc.tdMuted}">${p.category}</td>
-                <td class="${tc.tdMuted}">${p.color}</td>
-                <td class="${tc.tdMuted}">
+                <td data-label="اسم الموديل" class="${tc.tdText}">${p.model_name}</td>
+                <td data-label="الفئة" class="${tc.tdMuted}">${p.category}</td>
+                <td data-label="اللون" class="${tc.tdMuted}">${p.color}</td>
+                <td data-label="المقاسات" class="${tc.tdMuted}">
                     <span class="${tc.chip}">${p.sizes_count} مقاس</span>
                 </td>
-                <td class="${tc.tdText} ${p.total_quantity > 0 ? 'text-emerald-600' : 'text-outline-variant'}">${p.total_quantity}</td>
-                <td class="${tc.tdMuted} text-left">
+                <td data-label="الكمية" class="${tc.tdText} ${p.total_quantity > 0 ? 'text-emerald-600' : 'text-outline-variant'}">${p.total_quantity}</td>
+                <td data-label="" class="${tc.tdMuted} text-left">
                     <button class="${tc.btnEdit} edit-btn" data-id="${p.id}">edit</button>
                     <button class="${tc.btnDelete} delete-btn" data-id="${p.id}" data-name="${p.model_name}">delete</button>
                 </td>

@@ -32,6 +32,52 @@ body {
     transform: scale(0.95);
 }
 
+/* Mobile responsive font sizes */
+@media (max-width: 639px) {
+    .text-display-xl { font-size: 22px; line-height: 30px; }
+    .text-headline-lg { font-size: 18px; line-height: 26px; }
+    .text-title-md { font-size: 16px; line-height: 24px; }
+    .table-mobile-card tbody td button {
+        min-width: 36px;
+        min-height: 36px;
+    }
+    .table-mobile-card tbody td[data-label=""]::before {
+        content: none;
+    }
+    .table-mobile-card tbody td[data-label=""] {
+        justify-content: flex-start;
+    }
+}
+
+/* Ensure tables don't break layout on mobile */
+@media (max-width: 767px) {
+    .table-mobile-card thead {
+        display: none;
+    }
+    .table-mobile-card tbody tr {
+        display: block;
+        padding: 12px;
+        margin-bottom: 12px;
+        border: 1px solid #e4e1ee;
+        border-radius: 12px;
+        background: white;
+    }
+    .table-mobile-card tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border: none;
+        font-size: 14px;
+    }
+    .table-mobile-card tbody td::before {
+        content: attr(data-label);
+        font-weight: 500;
+        color: #464555;
+        font-size: 12px;
+    }
+}
+
 /* Skeleton Loading Animation */
 .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
