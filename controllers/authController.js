@@ -45,25 +45,12 @@ async function login(req, res, next) {
 }
 
 function logout(req, res, next) {
-  if (!req.session) {
-    return res.status(200).json({
-      success: true,
-      message: 'تم تسجيل الخروج بنجاح'
-    });
-  }
+  req.session = null;
 
-  return req.session.destroy((error) => {
-    if (error) {
-      return next(error);
-    }
-
-    res.clearCookie('ma5znerp.sid');
-
-    return res.status(200).json({
-      success: true,
-      message: 'تم تسجيل الخروج بنجاح',
-      redirectUrl: '/login'
-    });
+  return res.status(200).json({
+    success: true,
+    message: 'تم تسجيل الخروج بنجاح',
+    redirectUrl: '/login'
   });
 }
 

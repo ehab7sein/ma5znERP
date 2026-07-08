@@ -5,8 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
+const session = require('cookie-session');
 const morgan = require('morgan');
 const { databaseConfig } = require('./config/database');
 const { setUserLocals } = require('./middleware/auth');
@@ -17,28 +16,25 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 
+app.set('trust proxy', 1);
+
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(morgan(isProduction ? 'combined' : 'dev'));
-app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   name: 'ma5znerp.sid',
-  secret: process.env.SESSION_SECRET || 'change-this-to-a-long-random-string',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: 'lax',
-    maxAge: Number(process.env.SESSION_MAX_AGE) || 1000 * 60 * 60 * 8
-  }
+  keys: [process.env.SESSION_SECRET || 'change-this-to-a-long-random-string'],
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: 'lax',
+  maxAge: Number(process.env.SESSION_MAX_AGE) || 1000 * 60 * 60 * 8
 }));
 
 const dashboardRoutes = require('./routes/dashboard');
